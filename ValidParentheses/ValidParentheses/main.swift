@@ -10,9 +10,9 @@ import Foundation
 class Solution {
     func isValid(_ s: String) -> Bool {
         let dictionary: Dictionary<Character, Character> = [
-            "(": ")",
-            "[": "]",
-            "{": "}"
+            ")": "(",
+            "]": "[",
+            "}": "{"
         ]
         var stack: Array<Character> = []
         
@@ -32,6 +32,8 @@ class Solution {
 }
 
 let solution = Solution()
-let string = "[()()]"
+let string = "()"
 
 print(solution.isValid(string))
+
+"(,"
