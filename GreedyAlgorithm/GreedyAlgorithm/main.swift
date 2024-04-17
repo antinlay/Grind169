@@ -7,69 +7,37 @@
 
 import Foundation
 
-func maxWhiteMushrooms(_ forest: [[Character]]) -> Int {
-    let n = forest.count
-    var maxMushrooms = 0
-    
-    for startColumn in 0..<3 {
-        // If the starting cell is a white mushroom, we can collect it
-        var mushrooms = (forest[0][startColumn] == "C") ? 1 : 0
-        
-        var currentRow = 0
-        var currentColumn = startColumn
-        
-        while currentRow < n - 1 {
-            // Check possible next moves
-            let possibleMoves = [(1, -1), (1, 0), (1, 1)]
-            
-            var maxMushroomsInNextRow = 0
-            var nextColumn = -1
-            
-            for move in possibleMoves {
-                let nextRow = currentRow + move.0
-                let nextCol = currentColumn + move.1
-                
-                // Check if the next move is within bounds and not a thorny bush
-                if nextCol >= 0 && nextCol < 3 && forest[nextRow][nextCol] != "W" {
-                    let mushroomsInNextCell = (forest[nextRow][nextCol] == "C") ? 1 : 0
-                    if mushroomsInNextCell > maxMushroomsInNextRow {
-                        maxMushroomsInNextRow = mushroomsInNextCell
-                        nextColumn = nextCol
-                    }
-                }
+let n = Int(readLine()!)!
+var grid = [[Character]](repeating: [Character](repeating: ".", count: 3), count: n)
+
+for i in 0..<n {
+    let row = readLine()!
+    for j in 0..<3 {
+        grid[i][j] = row[row.index(row.startIndex, offsetBy: j)]
+    }
+}
+
+var dp = [[Int]](repeating: [Int](repeating: 0, count: 3), count: n)
+
+for i in (0..<n).reversed() {
+    for j in 0..<3 {
+        if grid[i][j] == "C" {
+            if i == n - 1 || (grid[i + 1][j] == "W" && grid[i + 1][safe: j - 1] == "W" && grid[i + 1][safe: j + 1] == "W") {
+                dp[i][j] = 1
+            } else {
+                dp[i][j] = 1 + max(dp[i + 1][j], dp[i + 1][safe: j - 1]!, dp[i + 1][safe: j + 1]!)
             }
-            
-            // If there are no possible moves, break the loop
-            if maxMushroomsInNextRow == 0 {
-                break
-            }
-            
-            mushrooms += maxMushroomsInNextRow
-            currentRow += 1
-            currentColumn = nextColumn
         }
-        
-        maxMushrooms = max(maxMushrooms, mushrooms)
     }
-    
-    return maxMushrooms
 }
 
-// Reading input
-guard let n = Int(readLine()!) else {
-    fatalError("Invalid input!")
-}
+print(max(dp[0][0], dp[0][1], dp[0][2]))
 
-var forest = [[Character]]()
-for _ in 0..<n {
-    guard let row = readLine()?.map({ $0 }) else {
-        fatalError("Invalid input!")
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
-    forest.append(row)
 }
 
-// Finding the maximum number of white mushrooms
-let result = maxWhiteMushrooms(forest)
-print(result)
 
 
