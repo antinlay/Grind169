@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:InterestingTrip/InterestingTrip.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Anagrams/Anagrams.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:GenerateParenthesesSequence/GenerateParenthesesSequence.xcodeproj">
    </FileRef>
    <FileRef
